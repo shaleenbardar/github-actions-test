@@ -10,6 +10,7 @@ This Repository is to Learn how github-actions work
 8) We can also use id in a job. 
 9) To use a variable use {{% steps.id.output.variable }}
 10) To Store or clone a directory to Github VM -> uses: actions/checkout@v1 under steps
+11) Use timeout-minutes: 360 same as aws lambda to limit step or job execution
 
 
 ## To Use Enviroment Variables -> For examples
@@ -41,3 +42,23 @@ Go to secret create a key value pair and in code use ${{secrets.Github_secretKey
   if: failure()
 4) If you want to specify if any step fails and after failing  a step should have to run then use "always()"-> 
   if: always()
+  
+## IF we want all other steps to run if any steps failed:
+1) Use : continue-on-error: True
+
+## How to Use Diffrent Exnviroment in a Best way:
+For this we will use "strategy", under strategy we can use->
+1) Matrix
+2) Max-parallel
+3) fail-fast: true, this means if any job fails then all other will fails
+4) To use matrix or strategy in other step as a variable: ${{ martrix.node_version }}
+5) To exclude a matrix combination we will use ->
+exclude:
+  - os: ubuntu-latest
+  node_version: 6
+6) To include a version or modification in strategy we can use->
+include:
+  - os: ubuntu-latest
+  node_version: 8
+  is_ubuntu_8 = "true"
+  
