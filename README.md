@@ -1,4 +1,4 @@
-# github-actions-test
+# github-actions
 This Repository is to Learn how github-actions work
 1) Use "runs-on" key to specify an operting system
 2) If you want to use another operating system you will need to create a new job
