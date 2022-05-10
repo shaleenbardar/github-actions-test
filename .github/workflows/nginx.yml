@@ -31,13 +31,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       # Extract metadata (tags, labels) for docker
-      - name: Extract Docker Metadata
+      - name: Extract Docker metadata
         id: meta
-        uses: docker/metadata-action@v4.0.1
+        uses: docker/metadata-action@v3
         with:
           images: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            ype=ref,event=branch
+            type=ref,event=branch
             type=ref,event=pr
             type=sha
             type=sha,format=long
