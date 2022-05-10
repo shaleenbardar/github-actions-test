@@ -1,0 +1,10 @@
+# docker-compose -f docker-compose.yml up
+
+version: "3"
+services:
+  nginx:
+    build: .
+    ports:
+      - 5000:80
+    volumes:
+      - ./static:/usr/share/nginx/html

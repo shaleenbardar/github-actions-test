@@ -1,0 +1,22 @@
+# docker build . -t static_page_image
+# docker stack deploy -c docker-compose.prod.yml static_page_service
+
+version: "3"
+services:
+  nginx:
+    image: static_page_image
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 128M
+      restart_policy:
+        condition: on-failure
+      replicas: 1
+      placement:
+          constraints: [node.role == manager]
+      update_config:
+        parallelism: 1
+        delay: 5m
+        failure_action: rollback
+        monitor: 1m
