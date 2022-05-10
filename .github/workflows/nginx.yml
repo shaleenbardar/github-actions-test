@@ -30,8 +30,6 @@ jobs:
           registry: ${{ env.IMAGE_REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-
       # Extract metadata (tags, labels) for docker
       - name: Extract Docker Metadata
         id: meta
@@ -45,11 +43,11 @@ jobs:
             type=sha,format=long
             type=raw,value={{branch}}-{{sha}}
 
-        # Build and push Docker Image with Buildx (Not on PR)
-        - name: Build and push Docker Image
-          uses: dcker/build-push-action@v3.0.0
-          with:
-            context: .
-            push: ${{ github.event_name != 'pull_request'}}
-            tags: ${{ steps.meta.outputs.tags }}
-            labels: ${{ steps.meta.outputs.labels }}
+      # Build and push Docker Image with Buildx (Not on PR)
+      - name: Build and push Docker Image
+        uses: dcker/build-push-action@v3.0.0
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request'}}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
