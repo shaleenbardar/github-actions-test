@@ -6,7 +6,8 @@ env:
   IMAGE_REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
   IMAGE_COMMIT_TAG: sha-${{ github.sha }}
-  INFRASTRUCTURE_REPO: sies-at/SIES-infrastructure
+  INFRASTRUCTURE_REPO: shaleenbardar/github-actions
+#  INFRASTRUCTURE_REPO: sies-at/SIES-infrastructure
 
 jobs:
   build:
@@ -51,3 +52,47 @@ jobs:
           push: ${{ github.event_name != 'pull_request'}}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  # Standalone Test Case
+  # If Http response = 200 then works ok
+  test-standalone:
+    runs-on: ubuntu-20.04
+    needs: build
+    permissions:
+      packages: read
+
+    steps:
+      - name: Log into registry ${{ env.IMAGE_REGISTRY }}
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v2.0.0
+        with:
+          registry: ${{ env.IMAGE_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull image for this commit
+        run: |
+          docker pull $IMAGE_REGISTRY/$IMAGE_NAME:$IMAGE_COMMIT_TAG
+
+      - name: Run Test (Wait for Http Response)
+        uses: cygnetdigital/wait_for_response@v2.0.0
+        with:
+          url: 'http://localhost:5000/'
+          responseCode: '200,500'
+          timeout: 10
+          interval: 0
+
+  triger_deplow:
+    runs-on: ubuntu-20.04
+    if: github.ref == 'refs/heads/master'
+    needs: [test-standalone]
+    steps:
+      - name: Trigger SIES-Infrastructure Deploy Workflow
+        uses: peter-evans/repository-dispatch@v1.1.3
+        with:
+          token: ${{ secrets.INFRASTRUCTURE_REPO_ACCESS_TOKEN }}
+          repository: ${{ env.INFRASTRUCTURE_REPO }}
+          event-type: deploy-news-sies
+          client-payload: '{"ref": "${{ github.ref }}", "image-tag": "${{ env.IMAGE_COMMIT_TAG }}"}'
+
+
