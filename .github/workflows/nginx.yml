@@ -73,6 +73,8 @@ jobs:
       - name: Pull image for this commit
         run: |
           docker pull $IMAGE_REGISTRY/$IMAGE_NAME:$IMAGE_COMMIT_TAG
+          cd ./services/static_pages/
+          docker-compose up
 
       - name: Run Test (Wait for Http Response)
         uses: cygnetdigital/wait_for_response@v2.0.0
