@@ -1,45 +1,45 @@
-name: Action Workflow
-
-on: push
-#  push:
-#    branches:
-#      - master
-##  schedule:
-##    - cron: "0/5 * * * *"
-##    - cron: "0/6 * * * *"
-#  pull_request:
-#    types:
-#      - closed
-#      - assigned
-#      - opened
-#      - reopened
-
-env:
-  IMAGE_REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-  IMAGE_COMMIT_TAG: sha-${{ github.sha }}
-  INFRASTRUCTURE_REPO: sies-at/SIES-infrastructure
-
-jobs:
-  run-github-actions:
-    runs-on: ubuntu-latest
-    steps:
-      - name: List Files
-        run: |
-          pwd
-          ls -a
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: Checkout Repo SIES
-        uses: actions/checkout@v2
-      - name: List Files After
-        run: |
-          pwd
-          ls
-      - name: Simple JS Action
-        id: greet
-        uses: actions/hello-world-javascript-action@v1.1
-        with:
-          who-to-greet: John
-      - name: Log Greeting Time
-        run: echo "${{ steps.greet.outputs.time }}"
+#name: Action Workflow
+#
+#on: push
+##  push:
+##    branches:
+##      - master
+###  schedule:
+###    - cron: "0/5 * * * *"
+###    - cron: "0/6 * * * *"
+##  pull_request:
+##    types:
+##      - closed
+##      - assigned
+##      - opened
+##      - reopened
+#
+#env:
+#  IMAGE_REGISTRY: ghcr.io
+#  IMAGE_NAME: ${{ github.repository }}
+#  IMAGE_COMMIT_TAG: sha-${{ github.sha }}
+#  INFRASTRUCTURE_REPO: sies-at/SIES-infrastructure
+#
+#jobs:
+#  run-github-actions:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: List Files
+#        run: |
+#          pwd
+#          ls -a
+#      - name: Checkout
+#        uses: actions/checkout@v1
+#      - name: Checkout Repo SIES
+#        uses: actions/checkout@v2
+#      - name: List Files After
+#        run: |
+#          pwd
+#          ls
+#      - name: Simple JS Action
+#        id: greet
+#        uses: actions/hello-world-javascript-action@v1.1
+#        with:
+#          who-to-greet: John
+#      - name: Log Greeting Time
+#        run: echo "${{ steps.greet.outputs.time }}"

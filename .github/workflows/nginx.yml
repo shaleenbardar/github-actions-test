@@ -73,8 +73,9 @@ jobs:
       - name: Pull image for this commit
         run: |
           docker pull $IMAGE_REGISTRY/$IMAGE_NAME:$IMAGE_COMMIT_TAG
-          cd ./services/static_pages/
-          docker-compose up
+          ls
+#          cd ./services/static_pages/
+#          docker-compose up
 
       - name: Run Test (Wait for Http Response)
         uses: cygnetdigital/wait_for_response@v2.0.0
@@ -84,7 +85,7 @@ jobs:
           timeout: 10
           interval: 0
 
-  triger_deplow:
+  triger_deploy:
     runs-on: ubuntu-20.04
     if: github.ref == 'refs/heads/master'
     needs: [test-standalone]
